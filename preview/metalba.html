@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Metalba — Bassano e Fortogna (demo)</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/preview.css" />
+    <style>
+      .preview-banner {
+        margin: 0;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: center;
+        color: var(--brand-secondary);
+        background: color-mix(in srgb, var(--accent) 14%, #fff);
+        border-bottom: 1px solid var(--line);
+      }
+      .map-pins-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .map-pins-layer .map-pin-btn { pointer-events: auto; }
+      .billet-panel[hidden] { display: none !important; }
+      :root {
+        --accent:#0B5F8A;--accent-press:#084A6C;--brand-secondary:#102A3A;
+      }
+    </style>
+  </head>
+  <body data-brand="metalba" data-default-site="bassano">
+    <p class="preview-banner" role="note">
+      Anteprima <strong>Metalba</strong> — Bassano (estrusione) e Fortogna (fonderia). Logo Metalba, separato da Aluminium Bozen.
+      · <a href="./index.html">tutte le anteprime</a>
+    </p>
+
+    <div class="page page-map">
+      <header class="app-header">
+        <div class="header-main-row">
+          <a class="brand-link" href="./index.html" aria-label="Metalba">
+            <img
+              id="brand-logo"
+              class="brand-logo"
+              src="./assets/brands/metalba/logo.webp"
+              alt="Metalba"
+              width="250"
+              height="44"
+            />
+          </a>
+          <div class="header-site-switch">
+            <div
+              class="site-switcher"
+              role="group"
+              aria-label="Seleziona piazzale"
+              id="site-switcher"
+            ></div>
+          </div>
+          <div class="header-user-col">
+            <p class="header-user-name">Demo · Metalba</p>
+          </div>
+        </div>
+        <p class="header-product-tag">Piazzali</p>
+      </header>
+
+      <main class="page-main">
+        <h1 class="visually-hidden">Metalba — Bassano e Fortogna (demo)</h1>
+        <section class="map-section" aria-label="Mappa piazzale">
+          <div class="map-toolbar" role="toolbar" aria-label="Strumenti mappa">
+            <label class="map-search">
+              <span class="visually-hidden">Cerca</span>
+              <input
+                id="search-input"
+                class="input map-search-input"
+                type="search"
+                placeholder="Filtra per commessa…"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <p class="map-hint" id="map-hint" role="status"></p>
+          <div class="map-frame" id="map-frame">
+            <img
+              class="map-aerial"
+              id="map-aerial"
+              src="./assets/bassano-aerial.jpg"
+              alt="Mappa Piazzale Metalba Bassano"
+              width="1515"
+              height="1038"
+              draggable="false"
+            />
+            <div id="map-pins" class="map-pins-layer" aria-live="polite"></div>
+          </div>
+          <aside class="map-sidebar" aria-label="Commesse e dettaglio">
+            <ul class="search-results billet-list" id="billet-list" aria-label="Commesse"></ul>
+            <div id="billet-panel" class="billet-panel" role="region" aria-label="Dettaglio billetta" hidden></div>
+          </aside>
+          <div class="map-meta">
+            <div class="map-meta-row">
+              <p class="map-address" id="map-address">Viale Vicenza 71, Bassano del Grappa</p>
+              <span class="sync-badge is-ok">Demo</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./assets/preview.js" defer></script>
+  </body>
+</html>

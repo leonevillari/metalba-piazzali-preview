@@ -1,6 +1,7 @@
-# Anteprima pubblica Piazzali
+# Anteprime pubbliche Piazzali (marchi separati)
 
-Copia statica (senza login) di [metalba-mag-esterno](https://github.com/leonevillari/metalba-mag-esterno).
-
-- Tutti i siti: https://leonevillari.github.io/metalba-piazzali-preview/preview/
-- **Piazzale Metalba Bassano:** https://leonevillari.github.io/metalba-piazzali-preview/preview/bassano.html
+- Hub: https://leonevillari.github.io/metalba-piazzali-preview/preview/
+- Aluminium Bozen: https://leonevillari.github.io/metalba-piazzali-preview/preview/bozen.html
+- Metalba: https://leonevillari.github.io/metalba-piazzali-preview/preview/metalba.html
+- Solo Bassano: https://leonevillari.github.io/metalba-piazzali-preview/preview/bassano.html
+- Solo Fortogna: https://leonevillari.github.io/metalba-piazzali-preview/preview/fortogna.html

@@ -102,6 +102,7 @@
   const SITES = {
     bolzano: {
       id: 'bolzano',
+      brandId: 'aluminium-bozen',
       label: 'Piazzale Bozen',
       shortLabel: 'Bozen',
       addressShort: 'Via Toni Ebner 24, Bolzano',
@@ -114,8 +115,9 @@
     },
     bassano: {
       id: 'bassano',
+      brandId: 'metalba',
       label: 'Piazzale Metalba',
-      shortLabel: 'Metalba Bassano',
+      shortLabel: 'Bassano',
       addressShort: 'Viale Vicenza 71, Bassano del Grappa',
       map: {
         src: './assets/bassano-aerial.jpg',
@@ -126,6 +128,7 @@
     },
     fortogna: {
       id: 'fortogna',
+      brandId: 'metalba',
       label: 'Fonderia Fortogna',
       shortLabel: 'Fortogna',
       addressShort: 'Via Fortogna 188/A, Fortogna BL',
@@ -136,6 +139,11 @@
       },
       transform: createTransform(FORTOGNA_GCP),
     },
+  }
+
+  const BRAND_DEFAULT_SITE = {
+    'aluminium-bozen': 'bolzano',
+    metalba: 'bassano',
   }
 
   // —— Seed billette (store + campi etichetta Aluminium Bozen) ———
@@ -314,13 +322,16 @@
   ]
 
   // —— Stato UI ————————————————————————————————————————
+  const pageBrand =
+    (document.body && document.body.dataset.brand) || 'aluminium-bozen'
   const DEFAULT_FROM_PAGE =
-    typeof document !== 'undefined' &&
-    document.body &&
-    document.body.dataset.defaultSite
+    document.body && document.body.dataset.defaultSite
       ? document.body.dataset.defaultSite
-      : 'bolzano'
-  let siteId = SITES[DEFAULT_FROM_PAGE] ? DEFAULT_FROM_PAGE : 'bolzano'
+      : BRAND_DEFAULT_SITE[pageBrand] || 'bolzano'
+  let siteId =
+    SITES[DEFAULT_FROM_PAGE] && SITES[DEFAULT_FROM_PAGE].brandId === pageBrand
+      ? DEFAULT_FROM_PAGE
+      : BRAND_DEFAULT_SITE[pageBrand] || 'bolzano'
   let selectedId = null
   let query = ''
   let dims = {
@@ -336,14 +347,36 @@
   const elHint = document.getElementById('map-hint')
   const elAddress = document.getElementById('map-address')
   const elSearch = document.getElementById('search-input')
+  const elLogo = document.getElementById('brand-logo')
 
-  // Allinea raster iniziale al sito di default della pagina
+  function brandSites() {
+    return Object.values(SITES).filter((s) => s.brandId === pageBrand)
+  }
+
+  // Allinea raster / logo iniziale
   ;(function syncInitialAerial() {
     const s = SITES[siteId]
     elAerial.src = s.map.src
     elAerial.width = s.map.width
     elAerial.height = s.map.height
     elAerial.alt = `Mappa ${s.label} — Piazzali`
+    if (elLogo) {
+      if (pageBrand === 'metalba') {
+        elLogo.src = './assets/brands/metalba/logo.webp'
+        elLogo.alt = 'Metalba'
+      } else {
+        elLogo.src = './assets/brands/aluminium-bozen/logo.png'
+        elLogo.alt = 'Aluminium Bozen'
+      }
+    }
+    if (elSwitcher) {
+      elSwitcher.innerHTML = brandSites()
+        .map((s) => {
+          const active = s.id === siteId
+          return `<button type="button" class="site-switcher-btn${active ? ' is-active' : ''}" data-site="${s.id}" aria-pressed="${active ? 'true' : 'false'}">${s.shortLabel}</button>`
+        })
+        .join('')
+    }
   })()
 
   function site() {
@@ -516,6 +549,7 @@
 
   function setSite(nextId) {
     if (!SITES[nextId] || nextId === siteId) return
+    if (SITES[nextId].brandId !== pageBrand) return
     siteId = nextId
     selectedId = null
     query = ''

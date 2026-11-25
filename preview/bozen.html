@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Aluminium Bozen — Piazzale Bozen (demo)</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/preview.css" />
+    <style>
+      .preview-banner {
+        margin: 0;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: center;
+        color: var(--brand-secondary);
+        background: color-mix(in srgb, var(--accent) 14%, #fff);
+        border-bottom: 1px solid var(--line);
+      }
+      .map-pins-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .map-pins-layer .map-pin-btn { pointer-events: auto; }
+      .billet-panel[hidden] { display: none !important; }
+      :root {
+        --accent:#6F40F1;--accent-press:#5A32D1;--brand-secondary:#0D0A46;
+      }
+    </style>
+  </head>
+  <body data-brand="aluminium-bozen" data-default-site="bolzano">
+    <p class="preview-banner" role="note">
+      Anteprima <strong>Aluminium Bozen</strong> — solo Piazzale Bozen (Bolzano). Marchio separato da Metalba.
+      · <a href="./index.html">tutte le anteprime</a>
+    </p>
+
+    <div class="page page-map">
+      <header class="app-header">
+        <div class="header-main-row">
+          <a class="brand-link" href="./index.html" aria-label="Aluminium Bozen">
+            <img
+              id="brand-logo"
+              class="brand-logo"
+              src="./assets/brands/aluminium-bozen/logo.png"
+              alt="Aluminium Bozen"
+              width="250"
+              height="44"
+            />
+          </a>
+          <div class="header-site-switch">
+            <div
+              class="site-switcher"
+              role="group"
+              aria-label="Seleziona piazzale"
+              id="site-switcher"
+            ></div>
+          </div>
+          <div class="header-user-col">
+            <p class="header-user-name">Demo · Aluminium Bozen</p>
+          </div>
+        </div>
+        <p class="header-product-tag">Piazzali</p>
+      </header>
+
+      <main class="page-main">
+        <h1 class="visually-hidden">Aluminium Bozen — Piazzale Bozen (demo)</h1>
+        <section class="map-section" aria-label="Mappa piazzale">
+          <div class="map-toolbar" role="toolbar" aria-label="Strumenti mappa">
+            <label class="map-search">
+              <span class="visually-hidden">Cerca</span>
+              <input
+                id="search-input"
+                class="input map-search-input"
+                type="search"
+                placeholder="Filtra per commessa…"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <p class="map-hint" id="map-hint" role="status"></p>
+          <div class="map-frame" id="map-frame">
+            <img
+              class="map-aerial"
+              id="map-aerial"
+              src="./assets/bolzano-aerial.jpg"
+              alt="Mappa Piazzale Bozen"
+              width="845"
+              height="1860"
+              draggable="false"
+            />
+            <div id="map-pins" class="map-pins-layer" aria-live="polite"></div>
+          </div>
+          <aside class="map-sidebar" aria-label="Commesse e dettaglio">
+            <ul class="search-results billet-list" id="billet-list" aria-label="Commesse"></ul>
+            <div id="billet-panel" class="billet-panel" role="region" aria-label="Dettaglio billetta" hidden></div>
+          </aside>
+          <div class="map-meta">
+            <div class="map-meta-row">
+              <p class="map-address" id="map-address">Via Toni Ebner 24, Bolzano</p>
+              <span class="sync-badge is-ok">Demo</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./assets/preview.js" defer></script>
+  </body>
+</html>
