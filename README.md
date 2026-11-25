@@ -1,7 +1,6 @@
 # Anteprima pubblica Piazzali
 
-Copia statica (senza login) dell’UI mappa di [metalba-mag-esterno](https://github.com/leonevillari/metalba-mag-esterno).
+Copia statica (senza login) di [metalba-mag-esterno](https://github.com/leonevillari/metalba-mag-esterno).
 
-**Link:** https://leonevillari.github.io/metalba-piazzali-preview/preview/
-
-Sorgente nel repo privato: cartella `preview/`.
+- Tutti i siti: https://leonevillari.github.io/metalba-piazzali-preview/preview/
+- **Piazzale Metalba Bassano:** https://leonevillari.github.io/metalba-piazzali-preview/preview/bassano.html

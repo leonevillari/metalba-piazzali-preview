@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Piazzale Metalba — Bassano (anteprima)</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/preview.css" />
+    <style>
+      /* Banner solo anteprima: non presente nell’app reale */
+      .preview-banner {
+        margin: 0;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: center;
+        color: var(--brand-secondary);
+        background: color-mix(in srgb, var(--accent) 14%, #fff);
+        border-bottom: 1px solid var(--line);
+      }
+      .preview-banner code {
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+      .map-pins-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .map-pins-layer .map-pin-btn {
+        pointer-events: auto;
+      }
+      /* display:flex su .billet-panel sovrascrive [hidden] del browser */
+      .billet-panel[hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body data-default-site="bassano">
+    <p class="preview-banner" role="note">
+      Anteprima dedicata <strong>Piazzale Metalba</strong> — Viale Vicenza 71, Bassano del Grappa.
+      Billette <code>PLACEHOLDER</code> (non inventario reale).
+      · <a href="./index.html">tutti i siti</a>
+    </p>
+
+    <div class="page page-map">
+      <header class="app-header">
+        <div class="header-main-row">
+          <a class="brand-link" href="./index.html" aria-label="Aluminium Bozen Piazzali">
+            <img
+              class="brand-logo"
+              src="./assets/logo.png"
+              alt="Aluminium Bozen"
+              width="250"
+              height="44"
+            />
+          </a>
+
+          <div class="header-site-switch">
+            <div
+              class="site-switcher is-desktop-prefer"
+              role="group"
+              aria-label="Seleziona sito da consultare"
+              id="site-switcher"
+            >
+              <button
+                type="button"
+                class="site-switcher-btn"
+                data-site="bolzano"
+                aria-pressed="false"
+              >
+                Bozen
+              </button>
+              <button
+                type="button"
+                class="site-switcher-btn is-active"
+                data-site="bassano"
+                aria-pressed="true"
+              >
+                Metalba Bassano
+              </button>
+              <button
+                type="button"
+                class="site-switcher-btn"
+                data-site="fortogna"
+                aria-pressed="false"
+              >
+                Fortogna
+              </button>
+            </div>
+          </div>
+
+          <div class="header-user-col">
+            <p class="header-user-name">Demo · Ufficio</p>
+          </div>
+        </div>
+        <p class="header-product-tag">Piazzali</p>
+      </header>
+
+      <main class="page-main">
+        <h1 class="visually-hidden">Piazzale Metalba Bassano — mappa (anteprima)</h1>
+
+        <section class="map-section" aria-label="Mappa piazzale">
+          <div class="map-toolbar" role="toolbar" aria-label="Strumenti mappa">
+            <label class="map-search">
+              <span class="visually-hidden">Cerca o filtra billetta</span>
+              <input
+                id="search-input"
+                class="input map-search-input"
+                type="search"
+                placeholder="Filtra per commessa (es. 2026/450)…"
+                autocomplete="off"
+                enterkeyhint="search"
+                inputmode="search"
+              />
+            </label>
+          </div>
+
+          <p class="map-hint" id="map-hint" role="status"></p>
+
+          <div class="map-frame" id="map-frame">
+            <img
+              class="map-aerial"
+              id="map-aerial"
+              src="./assets/bassano-aerial.jpg"
+              alt="Mappa Piazzale Metalba Bassano — Piazzali"
+              width="1515"
+              height="1038"
+              draggable="false"
+            />
+            <div
+              id="map-pins"
+              class="map-pins-layer"
+              aria-live="polite"
+            ></div>
+          </div>
+
+          <aside class="map-sidebar" aria-label="Commesse e dettaglio">
+            <ul
+              class="search-results billet-list"
+              id="billet-list"
+              aria-label="Commesse"
+            ></ul>
+            <div
+              id="billet-panel"
+              class="billet-panel"
+              role="region"
+              aria-label="Dettaglio billetta"
+              hidden
+            ></div>
+          </aside>
+
+          <div class="map-meta">
+            <div class="map-meta-row">
+              <p class="map-address" id="map-address">
+                Viale Vicenza 71, Bassano del Grappa
+              </p>
+              <span class="sync-badge is-ok" title="Anteprima offline">Demo</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./assets/preview.js" defer></script>
+  </body>
+</html>

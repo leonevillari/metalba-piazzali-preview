@@ -83,6 +83,14 @@
     { lat: 46.4746, lon: 11.330599, pixel: { x: 790, y: 1680 } },
   ]
 
+  const BASSANO_GCP = [
+    { lat: 45.761588, lon: 11.713525, pixel: { x: 212, y: 913 } },
+    { lat: 45.762576, lon: 11.713345, pixel: { x: 175, y: 105 } },
+    { lat: 45.761884, lon: 11.714658, pixel: { x: 1445, y: 615 } },
+    { lat: 45.762181, lon: 11.713113, pixel: { x: 70, y: 515 } },
+    { lat: 45.761525, lon: 11.714504, pixel: { x: 1385, y: 900 } },
+  ]
+
   const FORTOGNA_GCP = [
     { lat: 46.233228, lon: 12.29, pixel: { x: 230, y: 240 } },
     { lat: 46.233299, lon: 12.291234, pixel: { x: 1160, y: 170 } },
@@ -95,7 +103,7 @@
     bolzano: {
       id: 'bolzano',
       label: 'Piazzale Bozen',
-      shortLabel: 'Piazzale Bozen',
+      shortLabel: 'Bozen',
       addressShort: 'Via Toni Ebner 24, Bolzano',
       map: {
         src: './assets/bolzano-aerial.jpg',
@@ -104,11 +112,22 @@
       },
       transform: createTransform(BOLZANO_GCP),
     },
+    bassano: {
+      id: 'bassano',
+      label: 'Piazzale Metalba',
+      shortLabel: 'Metalba Bassano',
+      addressShort: 'Viale Vicenza 71, Bassano del Grappa',
+      map: {
+        src: './assets/bassano-aerial.jpg',
+        width: 1515,
+        height: 1038,
+      },
+      transform: createTransform(BASSANO_GCP),
+    },
     fortogna: {
       id: 'fortogna',
-      // id tecnico restato fortogna; etichetta UI = Piazzale Metalba
-      label: 'Piazzale Metalba',
-      shortLabel: 'Piazzale Metalba',
+      label: 'Fonderia Fortogna',
+      shortLabel: 'Fortogna',
       addressShort: 'Via Fortogna 188/A, Fortogna BL',
       map: {
         src: './assets/fortogna-aerial.jpg',
@@ -198,6 +217,44 @@
       position: null,
     },
     {
+      id: 'bil-bas-ph1',
+      code: 'PH-BAS-001',
+      orderCode: 'PLACEHOLDER/BAS',
+      customerName: 'PLACEHOLDER — billetta demo Bassano (non reale)',
+      alloy: '6082',
+      cut: 'Segato',
+      diameter: '203',
+      length: '3000',
+      lotto: 'PLACEHOLDER',
+      colata: '—',
+      pezzi: '1',
+      catasta: '—',
+      lordoKg: '—',
+      nettoKg: '—',
+      siteId: 'bassano',
+      status: 'piazzale',
+      position: { lat: 45.76205, lon: 11.7139 },
+    },
+    {
+      id: 'bil-bas-ph2',
+      code: 'PH-BAS-002',
+      orderCode: 'PLACEHOLDER/BAS',
+      customerName: 'PLACEHOLDER — billetta demo Bassano (non reale)',
+      alloy: '6060',
+      cut: 'Troncatura',
+      diameter: '178',
+      length: '4500',
+      lotto: 'PLACEHOLDER',
+      colata: '—',
+      pezzi: '2',
+      catasta: '—',
+      lordoKg: '—',
+      nettoKg: '—',
+      siteId: 'bassano',
+      status: 'piazzale',
+      position: { lat: 45.76185, lon: 11.7142 },
+    },
+    {
       id: 'bil-f01',
       code: 'BIL-F01',
       orderCode: '2026/510',
@@ -257,10 +314,19 @@
   ]
 
   // —— Stato UI ————————————————————————————————————————
-  let siteId = 'bolzano'
+  const DEFAULT_FROM_PAGE =
+    typeof document !== 'undefined' &&
+    document.body &&
+    document.body.dataset.defaultSite
+      ? document.body.dataset.defaultSite
+      : 'bolzano'
+  let siteId = SITES[DEFAULT_FROM_PAGE] ? DEFAULT_FROM_PAGE : 'bolzano'
   let selectedId = null
   let query = ''
-  let dims = { w: SITES.bolzano.map.width, h: SITES.bolzano.map.height }
+  let dims = {
+    w: SITES[siteId].map.width,
+    h: SITES[siteId].map.height,
+  }
 
   const elSwitcher = document.getElementById('site-switcher')
   const elAerial = document.getElementById('map-aerial')
@@ -270,6 +336,15 @@
   const elHint = document.getElementById('map-hint')
   const elAddress = document.getElementById('map-address')
   const elSearch = document.getElementById('search-input')
+
+  // Allinea raster iniziale al sito di default della pagina
+  ;(function syncInitialAerial() {
+    const s = SITES[siteId]
+    elAerial.src = s.map.src
+    elAerial.width = s.map.width
+    elAerial.height = s.map.height
+    elAerial.alt = `Mappa ${s.label} — Piazzali`
+  })()
 
   function site() {
     return SITES[siteId]
@@ -478,7 +553,9 @@
   try {
     const params = new URLSearchParams(location.search)
     const qSite = params.get('sito')
-    if (qSite === 'bolzano' || qSite === 'fortogna') setSite(qSite)
+    if (qSite === 'bolzano' || qSite === 'bassano' || qSite === 'fortogna') {
+      setSite(qSite)
+    }
     const qBil = params.get('billetta')
     if (qBil && BILLETS.some((b) => b.id === qBil && b.siteId === siteId)) {
       selectedId = qBil
