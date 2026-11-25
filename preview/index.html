@@ -2,7 +2,11 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
     <title>Piazzali — anteprime marchi (demo)</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/preview.css" />
@@ -10,7 +14,8 @@
       .hub {
         max-width: 430px;
         margin: 0 auto;
-        padding: 1.5rem 1.1rem 2rem;
+        padding: 1.5rem 1.1rem calc(2rem + env(safe-area-inset-bottom, 0));
+        padding-top: calc(1.5rem + env(safe-area-inset-top, 0));
       }
       .hub h1 {
         font-size: 1.6rem;

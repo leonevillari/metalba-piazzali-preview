@@ -47,6 +47,14 @@ body,
   min-height: 100%;
 }
 
+html {
+  /* Scorrimento pagina libero su cellulare/palmare (non bloccare gesture). */
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: auto;
+}
+
 body {
   font-family: var(--font);
   background:
@@ -59,6 +67,11 @@ body {
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Evita che body “intrappoli” lo scroll (problema tipico PWA / iOS). */
+  overflow-x: hidden;
+  overflow-y: visible;
+  min-height: 100dvh;
+  position: relative;
 }
 
 button,
@@ -588,13 +601,24 @@ a {
 .map-frame {
   position: relative;
   width: 100%;
+  /* Anteprima statica: niente pan/zoom custom → non bloccare lo scroll pagina.
+     (Nella React app production resta touch-action:none per drag pin.) */
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--line);
   background: #111;
-  touch-action: none;
+  touch-action: pan-y;
   user-select: none;
+  -webkit-user-select: none;
   box-shadow: var(--shadow);
+}
+
+/* Contenitore che segue l’altezza dell’aerea: i pin restano allineati
+   anche quando .map-frame ha max-height + overflow auto su mobile. */
+.map-stage {
+  position: relative;
+  width: 100%;
+  line-height: 0;
 }
 
 .map-frame.is-adding {
@@ -691,7 +715,8 @@ a {
   margin: 0;
   color: inherit;
   cursor: grab;
-  touch-action: none;
+  /* pan-y: tap sul pin ok, scorri verticale della pagina non bloccato */
+  touch-action: pan-y;
   min-width: 40px;
   min-height: 40px;
 }
@@ -1640,14 +1665,80 @@ a {
   color: var(--ink-muted);
 }
 
-/* Mobile touch: larger list rows, safe areas */
+/* Mobile touch: larger list rows, safe areas, scroll libero + mappa intera */
 @media (max-width: 959px) {
   .page {
     padding-bottom: env(safe-area-inset-bottom, 0);
+    /* Non fissare altezza: altrimenti overflow nascosto taglia lista/mappa */
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
   }
 
   .page-main {
     padding: 0.85rem 0.95rem calc(1.25rem + env(safe-area-inset-bottom, 0));
+    overflow: visible;
+    flex: 1 0 auto;
+  }
+
+  .map-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  /* Su mobile: ricerca → lista commesse → mappa (così le commesse non restano sotto 900px di aerea). */
+  .map-section > .map-toolbar {
+    order: 1;
+  }
+
+  .map-section > .map-hint,
+  .map-section > .scan-toast,
+  .map-section > .place-bar {
+    order: 2;
+  }
+
+  .map-section > .map-sidebar {
+    order: 3;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .map-section > .map-frame {
+    order: 4;
+  }
+
+  .map-section > .map-meta {
+    order: 5;
+  }
+
+  /*
+   * Mappa aerea Bozen è 845×1860 (~2.2:1): a piena larghezza riempie lo schermo.
+   * Limite di altezza + scroll interno sul .map-stage → mappa intera raggiungibile;
+   * touch-action pan-* non blocca lo scroll della pagina.
+   */
+  .map-frame {
+    max-height: min(58dvh, 480px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    /* A fine corsa della mappa, lo scroll continua sulla pagina (non “blocca”). */
+    overscroll-behavior-y: auto;
+    touch-action: pan-x pan-y;
+    background: #0a0a0a;
+  }
+
+  .map-aerial {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+  }
+
+  .map-pins-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .map-search-input,
@@ -1685,11 +1776,26 @@ a {
   .header-main-row {
     column-gap: 0.35rem;
     align-items: center;
+    /* Logo più largo: evita troncamento “METALBA …” su 390px */
+    grid-template-columns: minmax(0, 1.35fr) auto minmax(0, 0.7fr);
   }
 
   .header-site-switch {
-    max-width: 34vw;
-    overflow: hidden;
+    /* Non comprimere lo switcher a 34vw → evita wrap verticale Bassano/Fortogna */
+    max-width: none;
+    overflow: visible;
+  }
+
+  .site-switcher {
+    flex-wrap: nowrap;
+    max-width: none;
+  }
+
+  .site-switcher-btn {
+    min-height: 40px;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
   }
 
   .header-site-label {
@@ -1713,6 +1819,16 @@ a {
   .app-header {
     padding: 0.4rem 0.7rem calc(0.45rem + env(safe-area-inset-top, 0));
     padding-top: calc(0.4rem + env(safe-area-inset-top, 0));
+    /* Sticky ok, ma non deve creare stacking che blocca scroll */
+    position: sticky;
+    z-index: 20;
+  }
+
+  .preview-banner {
+    /* Banner su più righe: lascia spazio e non fissare altezza */
+    line-height: 1.35;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.74rem;
   }
 }
 
