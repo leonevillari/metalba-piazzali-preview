@@ -23,12 +23,15 @@ Poi apri: [http://127.0.0.1:8080/preview/](http://127.0.0.1:8080/preview/)
 
 ## Link pubblici (GitHub Pages)
 
-Dopo il merge su `main` e il deploy Pages:
+Il repo `metalba-mag-esterno` è **privato** (piano Free → Pages non attivabile lì).  
+L’anteprima pubblica è sul repo dedicato **`leonevillari/metalba-piazzali-preview`**:
 
-- Hub / redirect: `https://leonevillari.github.io/metalba-mag-esterno/`
-- Anteprima mappa: `https://leonevillari.github.io/metalba-mag-esterno/preview/`
+- Hub / redirect: https://leonevillari.github.io/metalba-piazzali-preview/
+- Anteprima mappa: https://leonevillari.github.io/metalba-piazzali-preview/preview/
+- Solo Piazzale Metalba (deep-link): https://leonevillari.github.io/metalba-piazzali-preview/preview/?sito=fortogna
+- Billetta esempio Bolzano: https://leonevillari.github.io/metalba-piazzali-preview/preview/?sito=bolzano&billetta=bil-001
 
-Parametri opzionali: `?sito=fortogna&billetta=bil-f01`
+Quando cambi i file in `preview/` di questo repo, aggiorna anche la copia pubblica (push su `metalba-piazzali-preview`).
 
 ## File
 
