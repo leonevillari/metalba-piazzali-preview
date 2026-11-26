@@ -1597,6 +1597,23 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem;
+  min-width: 0;
+}
+
+.ocr-field-row > .ocr-field {
+  min-width: 0;
+}
+
+.ocr-field .input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 420px) {
+  .ocr-field-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ocr-error {

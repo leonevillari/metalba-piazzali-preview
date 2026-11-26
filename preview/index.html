@@ -7,12 +7,12 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="color-scheme" content="light" />
-    <title>Piazzali — anteprime marchi (demo)</title>
+    <title>Piazzali — demo magazziniere e commerciale</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/preview.css" />
     <style>
       .hub {
-        max-width: 430px;
+        max-width: 520px;
         margin: 0 auto;
         padding: 1.5rem 1.1rem calc(2rem + env(safe-area-inset-bottom, 0));
         padding-top: calc(1.5rem + env(safe-area-inset-top, 0));
@@ -21,13 +21,19 @@
         font-size: 1.6rem;
         margin: 0 0 0.5rem;
       }
+      .hub h2 {
+        font-size: 1.05rem;
+        margin: 1.5rem 0 0.35rem;
+        letter-spacing: -0.01em;
+      }
       .hub p {
         color: var(--ink-muted);
         line-height: 1.45;
+        margin: 0 0 0.75rem;
       }
       .hub-card {
         display: block;
-        margin: 0.85rem 0;
+        margin: 0.65rem 0;
         padding: 1rem 1.1rem;
         border-radius: var(--radius);
         border: 1px solid var(--line);
@@ -44,36 +50,69 @@
       .hub-card span {
         font-size: 0.88rem;
         color: var(--ink-muted);
+        line-height: 1.35;
+      }
+      .hub-kicker {
+        margin: 0 0 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold-text, #7a5a22);
+        color: #7a5a22;
+      }
+      .hub-section {
+        margin-top: 0.5rem;
+        padding-top: 0.25rem;
       }
     </style>
   </head>
   <body>
     <div class="hub">
-      <h1>Anteprime Piazzali</h1>
+      <p class="hub-kicker">Demo Piazzali</p>
+      <h1>Due versioni da provare</h1>
       <p>
-        Marchi <strong>separati</strong>: Aluminium Bozen da una parte, Metalba
-        dall’altra. Niente login — solo demo da condividere.
+        <strong>Magazziniere</strong> (cellulare/palmare): mappa, foto etichetta,
+        OCR di prova, posiziona, metti in lavorazione.<br />
+        <strong>Commerciale</strong> (computer): elenco comande e assegnazione ai
+        mulettisti. Niente login — subito usabile.
       </p>
 
-      <a class="hub-card" href="./bozen.html">
-        <strong>Aluminium Bozen — Piazzale Bozen</strong>
-        <span>Via Toni Ebner 24, Bolzano · logo Aluminium Bozen</span>
-      </a>
+      <div class="hub-section">
+        <h2>1 · Magazziniere (mobile + OCR)</h2>
+        <p>Apri dal telefono. Bottone «Foto etichetta» sotto (o accanto) la ricerca.</p>
 
-      <a class="hub-card" href="./metalba.html">
-        <strong>Metalba — Bassano e Fortogna</strong>
-        <span>Logo Metalba · switcher Bassano / Fortogna</span>
-      </a>
+        <a class="hub-card" href="./bozen.html">
+          <strong>Aluminium Bozen — Piazzale Bozen</strong>
+          <span>Logo AB · solo Bozen · foto/OCR · in lavorazione</span>
+        </a>
+        <a class="hub-card" href="./metalba.html">
+          <strong>Metalba — Bassano e Fortogna</strong>
+          <span>Logo Metalba · switcher siti · foto/OCR</span>
+        </a>
+        <a class="hub-card" href="./bassano.html">
+          <strong>Solo Piazzale Metalba (Bassano)</strong>
+          <span>Viale Vicenza 71 · billette PLACEHOLDER</span>
+        </a>
+        <a class="hub-card" href="./fortogna.html">
+          <strong>Solo Fonderia Fortogna</strong>
+          <span>Via Fortogna 188/A · foto/OCR</span>
+        </a>
+      </div>
 
-      <a class="hub-card" href="./bassano.html">
-        <strong>Solo Piazzale Metalba (Bassano)</strong>
-        <span>Viale Vicenza 71 · billette PLACEHOLDER</span>
-      </a>
+      <div class="hub-section">
+        <h2>2 · Ufficio commerciale (desktop)</h2>
+        <p>Apri dal computer. Assegna comande a Marco Rossi / Luca Bianchi.</p>
 
-      <a class="hub-card" href="./fortogna.html">
-        <strong>Solo Fonderia Fortogna</strong>
-        <span>Via Fortogna 188/A, Longarone BL</span>
-      </a>
+        <a class="hub-card" href="./commerciale-bozen.html">
+          <strong>Commerciale — Aluminium Bozen</strong>
+          <span>Tabella comande Bozen · assegna mulettista · KPI</span>
+        </a>
+        <a class="hub-card" href="./commerciale-metalba.html">
+          <strong>Commerciale — Metalba</strong>
+          <span>Bassano + Fortogna · filtri sito · assegna mulettista</span>
+        </a>
+      </div>
     </div>
   </body>
 </html>

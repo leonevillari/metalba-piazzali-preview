@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <title>Ufficio commerciale — Metalba (demo)</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/preview.css" />
+    <link rel="stylesheet" href="./assets/preview-commerciale.css" />
+    <style>
+      :root {
+        --accent: #0b5f8a;
+        --accent-press: #084a6c;
+        --brand-secondary: #102a3a;
+      }
+    </style>
+  </head>
+  <body data-role="commerciale" data-brand="metalba" class="page-commerciale">
+    <p class="preview-banner" role="note">
+      Demo <strong>ufficio commerciale</strong> — Metalba Bassano + Fortogna (desktop).
+      Assegna le comande ai mulettisti.
+      · <a href="./metalba.html">versione magazziniere</a>
+      · <a href="./index.html">hub</a>
+    </p>
+
+    <div class="page page-com">
+      <header class="app-header com-header">
+        <div class="header-main-row">
+          <a class="brand-link" href="./index.html" aria-label="Metalba">
+            <img
+              class="brand-logo"
+              src="./assets/brands/metalba/logo.webp"
+              alt="Metalba"
+              width="250"
+              height="44"
+            />
+          </a>
+          <p class="header-product-tag" style="margin: 0">Ufficio commerciale</p>
+          <div class="header-user-col">
+            <p class="header-user-name">Demo · Giulia Verdi (ufficio)</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-main com-main">
+        <header class="comande-header">
+          <h1 class="comande-title">Commesse Metalba</h1>
+          <p class="comande-lead">
+            Vista desktop: Bassano (estrusione) e Fortogna (fonderia). Assegna
+            ogni billetta a un mulettista; sul palmare usano foto etichetta / OCR.
+          </p>
+        </header>
+
+        <p id="com-toast" class="scan-toast" role="status" hidden></p>
+
+        <div class="com-kpi" id="com-kpi" aria-label="Indicatori"></div>
+
+        <div class="site-switcher com-filters" role="group" aria-label="Filtra sito">
+          <button
+            type="button"
+            class="site-switcher-btn is-active"
+            data-filter-site="all"
+            aria-pressed="true"
+          >
+            Tutte
+          </button>
+          <button
+            type="button"
+            class="site-switcher-btn"
+            data-filter-site="bassano"
+            aria-pressed="false"
+          >
+            Bassano
+          </button>
+          <button
+            type="button"
+            class="site-switcher-btn"
+            data-filter-site="fortogna"
+            aria-pressed="false"
+          >
+            Fortogna
+          </button>
+        </div>
+
+        <div class="com-table-wrap">
+          <table class="com-table">
+            <thead>
+              <tr>
+                <th>Commessa</th>
+                <th>Sito</th>
+                <th>Cliente</th>
+                <th class="num">Lega</th>
+                <th>GPS</th>
+                <th>Assegna a mulettista</th>
+              </tr>
+            </thead>
+            <tbody id="com-tbody"></tbody>
+          </table>
+          <p id="com-empty" class="comande-lead" hidden>Nessuna commessa.</p>
+        </div>
+
+        <p class="comande-lead" style="margin-top: 1.25rem">
+          Sul campo:
+          <a href="./metalba.html">Metalba magazziniere</a> ·
+          <a href="./bassano.html">solo Bassano</a> ·
+          <a href="./fortogna.html">solo Fortogna</a>
+        </p>
+      </main>
+    </div>
+    <script src="./assets/preview-commerciale.js" defer></script>
+  </body>
+</html>

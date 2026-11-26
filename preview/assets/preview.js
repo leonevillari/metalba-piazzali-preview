@@ -324,6 +324,8 @@
   // —— Stato UI ————————————————————————————————————————
   const pageBrand =
     (document.body && document.body.dataset.brand) || 'aluminium-bozen'
+  const pageRole =
+    (document.body && document.body.dataset.role) || 'magazziniere'
   const DEFAULT_FROM_PAGE =
     document.body && document.body.dataset.defaultSite
       ? document.body.dataset.defaultSite
@@ -337,6 +339,31 @@
   let dims = {
     w: SITES[siteId].map.width,
     h: SITES[siteId].map.height,
+  }
+  let toastTimer = null
+
+  const DEMO_OPERATORS = [
+    { id: 'op-marco', displayName: 'Marco Rossi' },
+    { id: 'op-luca', displayName: 'Luca Bianchi' },
+  ]
+
+  function showToast(msg, kind) {
+    let el = document.getElementById('preview-toast')
+    if (!el) {
+      el = document.createElement('p')
+      el.id = 'preview-toast'
+      el.className = 'scan-toast'
+      el.setAttribute('role', 'status')
+      const section = document.querySelector('.map-section') || document.body
+      section.insertBefore(el, section.firstChild)
+    }
+    el.textContent = msg
+    el.classList.toggle('is-lavorazione', kind === 'lavorazione')
+    el.hidden = false
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => {
+      el.hidden = true
+    }, 3200)
   }
 
   const elSwitcher = document.getElementById('site-switcher')
@@ -520,6 +547,33 @@
         selected.lordoKg !== '—' || selected.nettoKg !== '—'
           ? `L ${selected.lordoKg} / N ${selected.nettoKg} kg`
           : null
+      const assignee = DEMO_OPERATORS.find(
+        (o) => o.id === selected.assignedToUserId,
+      )
+      const assignLine = assignee
+        ? factRow('Assegnata a', assignee.displayName)
+        : ''
+      const magActions =
+        pageRole === 'magazziniere'
+          ? `
+          ${
+            !selected.position
+              ? `<button type="button" class="btn btn-primary btn-block posiziona-btn-expand" id="btn-place">Posiziona</button>`
+              : ''
+          }
+          <button type="button" class="btn btn-secondary btn-block" id="btn-ocr-selected">Foto etichetta</button>
+          <button type="button" class="btn lavorazione-btn btn-block" id="btn-lavorazione">Metti in lavorazione</button>`
+          : `
+          <div class="assign-control">
+            <label class="assign-control-label" for="assign-select">Assegna a mulettista</label>
+            <select id="assign-select" class="input assign-select">
+              <option value="">— Non assegnata —</option>
+              ${DEMO_OPERATORS.map(
+                (o) =>
+                  `<option value="${o.id}"${o.id === selected.assignedToUserId ? ' selected' : ''}>${escapeHtml(o.displayName)}</option>`,
+              ).join('')}
+            </select>
+          </div>`
       elPanel.innerHTML = `
         <p class="billet-panel-title">${escapeHtml(selected.code)}</p>
         <dl class="billet-facts">
@@ -533,18 +587,124 @@
           ${factRow('Dimensioni', formatDimensions(selected.diameter, selected.length))}
           ${factRow('Peso', weight)}
           ${factRow('GPS', formatGps(selected.position))}
+          ${assignLine}
         </dl>
         <div class="billet-actions">
+          ${magActions}
           <button type="button" class="btn btn-ghost btn-block" id="btn-back-list">Torna alla lista</button>
         </div>`
       document.getElementById('btn-back-list').addEventListener('click', () => {
         selectedId = null
         render()
       })
+      const btnOcr = document.getElementById('btn-ocr-selected')
+      if (btnOcr) {
+        btnOcr.addEventListener('click', () => {
+          if (window.__piazzaliOcr) window.__piazzaliOcr.openForSelected(selected.id)
+        })
+      }
+      const btnLav = document.getElementById('btn-lavorazione')
+      if (btnLav) {
+        btnLav.addEventListener('click', () => {
+          selected.status = 'in_lavorazione'
+          showToast(
+            `Billetta ${selected.code} in lavorazione`,
+            'lavorazione',
+          )
+          selectedId = null
+          render()
+        })
+      }
+      const btnPlace = document.getElementById('btn-place')
+      if (btnPlace) {
+        btnPlace.addEventListener('click', () => {
+          const s = site()
+          // Posizione demo al centro del piazzale (GCP medio)
+          selected.position = {
+            lat: s.id === 'bolzano' ? 46.4753 : s.id === 'bassano' ? 45.762 : 46.2331,
+            lon: s.id === 'bolzano' ? 11.3293 : s.id === 'bassano' ? 11.7139 : 12.2914,
+          }
+          showToast(`Posizione GPS salvata per ${selected.code}`)
+          render()
+        })
+      }
+      const assignSel = document.getElementById('assign-select')
+      if (assignSel) {
+        assignSel.addEventListener('change', () => {
+          const v = assignSel.value || null
+          selected.assignedToUserId = v
+          selected.assignedAt = v ? new Date().toISOString() : null
+          const name = DEMO_OPERATORS.find((o) => o.id === v)?.displayName
+          showToast(
+            v
+              ? `Assegnata a ${name}`
+              : 'Assegnazione rimossa',
+          )
+          render()
+        })
+      }
     } else {
       elPanel.hidden = true
       elPanel.innerHTML = ''
     }
+  }
+
+  function onOcrConfirm(fields, targetId) {
+    if (targetId) {
+      const bil = BILLETS.find((b) => b.id === targetId)
+      if (bil) {
+        Object.assign(bil, {
+          code: fields.code || bil.code,
+          orderCode: fields.orderCode || bil.orderCode,
+          customerName: fields.customerName || bil.customerName,
+          alloy: fields.alloy || bil.alloy,
+          cut: fields.cut || bil.cut,
+          diameter: fields.diameter || bil.diameter,
+          length: fields.length || bil.length,
+          lotto: fields.lotto || bil.lotto,
+          colata: fields.colata || bil.colata,
+          pezzi: fields.pezzi || bil.pezzi,
+          catasta: fields.catasta || bil.catasta,
+          lordoKg: fields.lordoKg || bil.lordoKg,
+          nettoKg: fields.nettoKg || bil.nettoKg,
+        })
+        selectedId = bil.id
+        showToast(`Etichetta aggiornata · ${bil.code}`)
+        render()
+        return
+      }
+    }
+    const id = `bil-ocr-${Date.now()}`
+    BILLETS.push({
+      id,
+      code: fields.code || `OCR-${Date.now().toString().slice(-4)}`,
+      orderCode: fields.orderCode || 'DEMO/OCR',
+      customerName: fields.customerName || 'Da etichetta',
+      alloy: fields.alloy || '—',
+      cut: fields.cut || '—',
+      diameter: fields.diameter || '—',
+      length: fields.length || '—',
+      lotto: fields.lotto || '—',
+      colata: fields.colata || '—',
+      pezzi: fields.pezzi || '—',
+      catasta: fields.catasta || '—',
+      lordoKg: fields.lordoKg || '—',
+      nettoKg: fields.nettoKg || '—',
+      siteId,
+      status: 'piazzale',
+      position: null,
+      assignedToUserId: null,
+    })
+    selectedId = id
+    showToast(`Nuova billetta da OCR · ${fields.code || id}`)
+    render()
+  }
+
+  window.__piazzaliPreview = {
+    onOcrConfirm,
+    getSiteId: () => siteId,
+    getBrand: () => pageBrand,
+    getRole: () => pageRole,
   }
 
   function setSite(nextId) {
